@@ -7,10 +7,17 @@ const posts = require("./data/posts");
 const bodyParser = require('body-parser');
 const errorsHand = require("./middlewares/errorsHandler");
 const unexpHand = require("./middlewares/unexpCallHandler");
+const cors = require("cors");
+
+app.use(cors({
+    origin: '*'
+}));
 
 app.use(bodyParser.json());
 
 app.use(express.static("public"));
+
+
 
 
 
