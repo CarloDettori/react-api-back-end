@@ -1,7 +1,7 @@
 "use strict"
 
 const express = require("express");
-const posts = require("../data/post");
+const posts = require("../data/posts");
 const router = express.Router();
 
 
