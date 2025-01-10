@@ -7,7 +7,7 @@ const router = express.Router();
 
 //read:  visualizzazione tutti elementi (index)
 function index(req, res) {
-    const allPosts = [...posts]
+    const allPosts = [...posts];
     res.json(allPosts)
 };
 
