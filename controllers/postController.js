@@ -44,8 +44,10 @@ function store(req, res) {
         content: req.body.content,
         image: req.body.image,
         tags: req.body.tags,
+        published: req.body.published,
     };
     posts.push(newPost);
+    console.log(posts);
     res.status(201).json(newPost);
 };
 
