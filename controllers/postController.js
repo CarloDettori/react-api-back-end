@@ -2,31 +2,54 @@
 
 const express = require("express");
 const posts = require("../data/posts");
+//import connection from "../connection";
+const { default: connection } = require("../connection");
 const router = express.Router();
 
 
 //read:  visualizzazione tutti elementi (index)
 function index(req, res) {
-    const allPosts = [...posts];
-    res.json(allPosts)
+    const sql = "SELECT * FROM `posts`"
+    connection.query(sql, (err, results) => {
+        console.log(results);
+        let data = results;
+        const response = {
+            totalCount: results.length,
+            data,
+        }
+        res.json(response)
+    })
+    // const allPosts = [...posts];
+    // res.json(allPosts)
 };
 
 //read:  visualizzazione 1 elemento (show)
 function show(req, res) {
     const id = parseInt(req.params.id);
+    const sql = "SELECT * FROM `posts` WHERE `id`"
     const onePost = posts.find((element) => element.id === id);
-    if (onePost) {
-        res.json({
-            success: true,
-            onePost,
-        });
-    } else {
-        res.status(404);
-        res.json({
-            success: false,
-            message: "il post non esiste",
-        });
-    };
+    connection.query(sql, [id], (err, results) => {
+        if (err) return res.status(500).json({ error: "database query failed" })
+        console.log(results)
+        const item = results[0];
+        if (!item) {
+            throw new CustomError("l'elemento non esiste", 404);
+        }
+        res.json(response)
+    });
+
+    // if (onePost) {
+    //     res.json({
+    //         success: true,
+    //         onePost,
+    //     });
+    // } else {
+    //     res.status(404);
+    //     res.json({
+    //         success: false,
+    //         message: "il post non esiste",
+    //     });
+    // };
 }
 
 //create:  creazione 1 elemento (store)
@@ -95,29 +118,23 @@ function modify(req, res) {
 function destroy(req, res) {
     const id = parseInt(req.params.id);
     const onePost = posts.find((element) => element.id === id);
-    if (onePost) {
-        posts[id] = {
-            deleteSuccess: true,
-            error: "204",
-            message: "post eliminato con successo",
+    const sql = "SELECT * FROM `posts` WHERE `id`"
+    connection.query(sql, [id], (err, results) => {
+        if (err) return res.status(500).json({ error: "database query failed" })
+        console.log(results)
+        const item = results[0];
+        if (!item) {
+            throw new CustomError("l'elemento non esiste", 404);
         }
-        res.json(posts)
+        res.json(response)
+    });
 
-    } else {
-        res.status(404);
-        res.json({
-            success: false,
-            error: "404",
-            message: "il post non esiste",
-        });
-    };
-};
-
-module.exports = {
-    index,
-    show,
-    store,
-    update,
-    modify,
-    destroy,
+    module.exports = {
+        index,
+        show,
+        store,
+        update,
+        modify,
+        destroy,
+    }
 }
