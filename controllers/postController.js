@@ -63,23 +63,35 @@ function show(req, res) {
 
 //create:  creazione 1 elemento (store)
 function store(req, res) {
-    let newId = 0;
-    for (let i = 0; i < posts.length; i++) {
-        if (posts[i].id > newId) {
-            newId = posts[i].id;
-        }
-    }
-    newId += 1;
+    // let newId = 0;
+    // for (let i = 0; i < posts.length; i++) {
+    //     if (posts[i].id > newId) {
+    //         newId = posts[i].id;
+    //     }
+    // }
+    // newId += 1;
+
     const newPost = {
-        id: newId,
+        // id: newId,
         title: req.body.title,
         content: req.body.content,
         image: req.body.image,
-        tags: req.body.tags,
+        // tags: req.body.tags,
         published: req.body.published,
     };
-    posts.push(newPost);
-    console.log(posts);
+
+    console.log(newPost);
+
+    // Inserire nel DATABASE il Post
+    const SQL = `INSERT INTO posts (title, content, image) VALUES ('${newPost.title}', '${newPost.content}', '${newPost.image}')`;
+
+    connection.query(SQL, (err, results) => {
+        console.log(results);
+        if (err) return res.status(500).json({ error: "Database INSERT query failed" });
+    });
+
+    // posts.push(newPost);
+    // console.log(posts);
     res.status(201).json(newPost);
 };
 
