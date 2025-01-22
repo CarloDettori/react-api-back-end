@@ -36,7 +36,7 @@ function show(req, res) {
         if (!item) {
             return res.status(404).json({ error: "L'elemento non esiste" });
         }
-        const sqltags = `SELECT tags.id, tags.name FROM ingredients
+        const sqltags = `SELECT tags.id, tags.name, FROM ingredients
         JOIN tags_post ON tags_post.tag_id = tags.id
         WHERE tags_post.post_id = ?`;
         connection.query(sqltags, [id], (err, results) => {
